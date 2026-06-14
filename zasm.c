@@ -281,6 +281,9 @@ void cmd_parser(int argv, char **args) {
     char *flag = args[1];
     char *zasm_name = args[2];
 
+    char original_zasm[256];
+    strcpy(original_zasm, zasm_name);
+
     if(flag[0] == '-') {
         switch (flag[1]) {
         case 'a':
@@ -288,8 +291,6 @@ void cmd_parser(int argv, char **args) {
             if(fh != NULL) {
                 char inst[MAX_LINE];
                 TOKEN_t token_buffer[3] = {0};
-                char original_zasm[256];
-                strcpy(original_zasm, zasm_name);
                 char *new_filename = strtok(zasm_name,".");
                 strcat(new_filename,".zx");
                 if (!remove(new_filename)) {
@@ -301,9 +302,12 @@ void cmd_parser(int argv, char **args) {
                     reset_token_buffer(token_buffer);
                 }
                 fclose(fh);
-                write_zx_html_file(original_zasm);
             }
             break;
+
+        case 'c':
+            write_zx_html_file(original_zasm);
+        break;    
 
         default:
             printf("%s","No such Command");
